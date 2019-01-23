@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
-import os, os.path
+import os
 import sys
+"""
+Author  - pyCity
+Date    - 22th January 2019
+Version - 1.0
 
-"""Quick downloader script for my commonly used github repos"""
+Usage:         python pyClone.py
+
+Description:   Quick downloader for some common red-team repos
+"""
 
 # Dictionary for download links Feel free to add your own. Don't forget any extras to add to menu.
 Links = {
@@ -13,9 +20,12 @@ Links = {
         "diamorphine" : "https://github.com/m0nad/Diamorphine",
         "vegile"      : "https://github.com/Screetsec/Vegile",
         "vlany"       : "https://github.com/mempodippy/vlany",
+        "keylogger"   : "https://github.com/GiacomoLaw/Keylogger",
+        "shellver"    : "https://github.com/0xR0/shellver",
         "ares"        : "https://github.com/sweetsoftware/Ares",
         "byob"        : "https://github.com/malwaredllc/byob"
         }
+
 
 def menu():
     print("Welcome to pyDownloader. Your options are:\n")
@@ -26,24 +36,34 @@ def menu():
           "diamorphine - LKM kernal Rootkit 2.6.x/3.x/4.x (x86 and x86_64)\n"
           "vegile      - Rootkit/Process hider\n"
           "vlany       - LD_PRELOAD Rootkit (x86 and x86_64)\n"
+          "keylogger   - Multi-platform keylogger with persistence\n"
+          "shellver    - Reverse shell cheat sheet (similar to msfvenom)\n"
           "ares        - Botnet/C2 Server with backdoor\n"
           "byob        - Botnet/C2 Server\n"
           "all         - Download all repositories\n"
           "exit        - sys.exit()\n")
 
 
-def check_for_git():
+        
+def checkGit():
     """Verify that git is installed, otherwise exit"""
+
     git_exists = os.path.exists("/usr/bin/git") # Assign variable to boolean
     if git_exists:
         print("Git found! Continuing....")
     else:
-        print("Git not detected. Please install Git before using this script.")
-        sys.exit()
+        print("Git not detected. Trying once more...")
+        last_check = os.system("command -v git")
+        if last_check:
+            print(last_check)
+        else:
+            sys.exit()
 
+        
 
-def clone_repo():
-    """Downloads tools via git clone"""
+def cloneRepo():
+    """Downloads tools via os.system"""
+
     while True:
         tool = input("Enter a tool to download: ")
         if tool in Links:
@@ -65,6 +85,7 @@ def clone_repo():
         else:
             print("Please enter a valid option (e.g., nmap)")
 
+        
 
 def clone_all():
     """Download everything in Links Array"""
@@ -74,12 +95,9 @@ def clone_all():
         os.system("git clone {}".format(i))
 
 
-def main():
-    os.system("clear")
-    check_for_git()
-    menu()
-    clone_repo()
-
 
 if __name__ == "__main__":
-    main()
+    os.system("clear")
+    checkGit()
+    menu()
+    cloneRepo()
